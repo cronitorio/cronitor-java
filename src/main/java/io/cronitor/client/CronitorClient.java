@@ -2,8 +2,6 @@ package io.cronitor.client;
 
 import org.apache.commons.lang3.StringUtils;
 
-import java.io.IOException;
-import java.net.URISyntaxException;
 import java.util.logging.Logger;
 
 public class CronitorClient {
@@ -24,7 +22,7 @@ public class CronitorClient {
         this.apiKey = apiKey;
     }
 
-    public void run(String monitorCode) throws IOException, URISyntaxException {
+    public void run(String monitorCode) {
         if(StringUtils.isNotBlank(monitorCode)) {
             cronitorPinger.ping(Command.RUN.getValue(), monitorCode, apiKey, null);
         } else {
@@ -32,7 +30,7 @@ public class CronitorClient {
         }
     }
 
-    public void run(String monitorCode, String message) throws IOException, URISyntaxException {
+    public void run(String monitorCode, String message) {
         if(StringUtils.isNotBlank(monitorCode)) {
             cronitorPinger.ping(Command.RUN.getValue(), monitorCode, apiKey, message);
         } else {
@@ -40,7 +38,7 @@ public class CronitorClient {
         }
     }
 
-    public void complete(String monitorCode) throws URISyntaxException, IOException {
+    public void complete(String monitorCode) {
 
         if(StringUtils.isNotBlank(monitorCode)) {
             cronitorPinger.ping(Command.COMPLETE.getValue(), monitorCode, apiKey, null);
@@ -49,7 +47,7 @@ public class CronitorClient {
         }
     }
 
-    public void complete(String monitorCode, String message) throws URISyntaxException, IOException {
+    public void complete(String monitorCode, String message) {
 
         if(StringUtils.isNotBlank(monitorCode)) {
             cronitorPinger.ping(Command.COMPLETE.getValue(), monitorCode, apiKey, message);
@@ -58,7 +56,7 @@ public class CronitorClient {
         }
     }
 
-    public void fail(String monitorCode) throws URISyntaxException, IOException {
+    public void fail(String monitorCode) {
 
         if(StringUtils.isNotBlank(monitorCode)) {
             cronitorPinger.ping(Command.FAIL.getValue(), monitorCode, apiKey, null);
@@ -67,7 +65,7 @@ public class CronitorClient {
         }
     }
 
-    public void fail(String monitorCode, String message) throws URISyntaxException, IOException {
+    public void fail(String monitorCode, String message) {
 
         if(StringUtils.isNotBlank(monitorCode)) {
             cronitorPinger.ping(Command.FAIL.getValue(), monitorCode, apiKey, message);
@@ -76,7 +74,7 @@ public class CronitorClient {
         }
     }
 
-    public void pause(String monitorCode, int timeoutInHours) throws URISyntaxException, IOException {
+    public void pause(String monitorCode, int timeoutInHours) {
 
         if(StringUtils.isNotBlank(monitorCode)) {
             cronitorPinger.pause(monitorCode, timeoutInHours, apiKey);
@@ -85,7 +83,7 @@ public class CronitorClient {
         }
     }
 
-    public void unpause(String monitorCode) throws URISyntaxException, IOException {
+    public void unpause(String monitorCode) {
 
         if(StringUtils.isNotBlank(monitorCode)) {
             cronitorPinger.pause(monitorCode, 0, apiKey);
