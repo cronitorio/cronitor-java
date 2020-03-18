@@ -1,0 +1,7 @@
+version: '3'
+services:
+  cronitor-java:
+    build: .
+    image: cronitor:java
+    volumes:
+      - .:/cronitor

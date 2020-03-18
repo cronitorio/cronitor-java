@@ -9,7 +9,7 @@ Simply add this line in your pom.xml file :
 ```
 <dependency>
     <groupId>io.cronitor</groupId>
-    <artifactId>cronitor-java</artifactId>
+    <artifactId>client</artifactId>
     <version>1.1.0</version>
 </dependency>
 ```
@@ -64,7 +64,7 @@ CronitorClient cronitorClient = new CronitorClient();
     try {
         // ping the /fail URL on your monitor with no extra message
         cronitorClient.fail(monitorCode);
-        
+
         // ping the /fail URL on your monitor with an extra message
         cronitorClient.fail(monitorCode, message);
     } catch (Exception e) {
@@ -89,6 +89,10 @@ CronitorClient cronitorClient = new CronitorClient();
         // handle the raised exception the way you want
     }
 ```
+
+## Development
+
+The contained Dockerfile/docker-compose.yml file will allow you to build and test this library. Build the library with `docker-compose up`. Run tests with `docker-compose run test`.
 
 ## How to contact us ?
 
