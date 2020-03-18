@@ -60,7 +60,6 @@ public class CronitorPinger {
 
     boolean _ping() throws URISyntaxException {
         try {
-            logger.warning(String.format(this.connection.getURL().toString()));
             this.connection.connect();
             this.connection.getInputStream();
             if (this.connection.getResponseCode() >= 500 ) {
