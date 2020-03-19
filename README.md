@@ -4,8 +4,12 @@ Cronitor is a service for heartbeat-style monitoring of anything that can send a
 
 This java library provides a simple abstraction for the pinging of a Cronitor monitor. For a better understanding of the API this library talks to, please see our [Ping API docs](https://cronitor.io/docs/ping-api). For a general introduction to Cronitor please read [How Cronitor Works](https://cronitor.io/docs/how-cronitor-works).
 
-## How to install it on your Maven project ?
-Simply add this line in your pom.xml file :
+## Install
+You can download the cronitor client JAR from the Maven central repository.
+[https://repo.maven.apache.org/maven2/io/cronitor/client/1.1.0/](https://repo.maven.apache.org/maven2/io/cronitor/client/1.1.0/)
+
+### Install with Maven
+If you are using Maven, simply add this line in your pom.xml file :
 ```
 <dependency>
     <groupId>io.cronitor</groupId>
@@ -46,7 +50,7 @@ CronitorClient cronitorClient = new CronitorClient();
     try {
         // ping the /run URL on your monitor
         cronitorClient.run(monitorCode);
-    } catch (Exception e) {
+    } catch (IOException e) {
         // handle the raised exception the way you want
     }
 ```
@@ -55,7 +59,7 @@ CronitorClient cronitorClient = new CronitorClient();
     try {
         // ping the /complete URL on your monitor
         cronitorClient.complete(monitorCode);
-    } catch (Exception e) {
+    } catch (IOException e) {
         // handle the raised exception the way you want
     }
 ```
@@ -67,7 +71,7 @@ CronitorClient cronitorClient = new CronitorClient();
 
         // ping the /fail URL on your monitor with an extra message
         cronitorClient.fail(monitorCode, message);
-    } catch (Exception e) {
+    } catch (IOException e) {
         // handle the raised exception the way you want
     }
 ```
@@ -76,7 +80,7 @@ CronitorClient cronitorClient = new CronitorClient();
     try {
         // pause a monitor for a number of hours
         cronitorClient.pause(monitorCode, numberOfHours);
-    } catch (Exception e) {
+    } catch (IOException e) {
         // handle the raised exception the way you want
     }
 ```
@@ -85,14 +89,14 @@ CronitorClient cronitorClient = new CronitorClient();
     try {
         // unpause a monitor
         cronitorClient.unpause(monitorCode);
-    } catch (Exception e) {
+    } catch (IOException e) {
         // handle the raised exception the way you want
     }
 ```
 
 ## Development
 
-The contained Dockerfile/docker-compose.yml file will allow you to build and test this library. Build the library with `docker-compose up`. Run tests with `docker-compose run test`.
+The contained Dockerfile/docker-compose.yml file will allow you to build and test this library. Build the container with with `docker-compose build`. Run tests with `docker-compose up`.
 
 ## How to contact us ?
 
@@ -102,6 +106,6 @@ Have a great day!
 
 ## Authors
 - [@lboix](https://github.com/lboix)
-- [@nerny](https://github.com/nerny)
+- [@nnerny](https://github.com/nnerny)
 - [@firone](https://github.com/firone)
 - [@aflanagan](https://github.com/aflanagan)
