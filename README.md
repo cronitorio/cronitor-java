@@ -98,11 +98,7 @@ CronitorClient cronitorClient = new CronitorClient();
 
 The contained Dockerfile/docker-compose.yml file will allow you to build and test this library. Build the container with with `docker-compose build`. Run tests with `docker-compose up`.
 
-## How to contact us ?
-
-If you want to share an idea, report an issue or just say hello, do not hesitate to write to us at support@cronitor.io 
-
-Have a great day!
+If you want to share an idea, report an issue, or just say hello you can open an issue on this repo or email us at support@cronitor.io. 
 
 ## Authors
 - [@lboix](https://github.com/lboix)
