@@ -4,11 +4,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
 import org.powermock.modules.junit4.PowerMockRunner;
 
-// import java.net.URL;
-import io.cronitor.client.Command;
 import static org.mockito.Mockito.verify;
 
 

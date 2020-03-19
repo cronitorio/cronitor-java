@@ -2,17 +2,12 @@ package io.cronitor.client;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mock;
-import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
 import java.net.URL;
-import java.util.logging.Logger;
 
 import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.atLeast;
-import static org.mockito.Mockito.verify;
 import java.net.HttpURLConnection;
 
 
@@ -27,7 +22,6 @@ public class CronitorPingerTest {
     private String command = "run";
     private String apiKey = null;
     private String message = null;
-    private final static Logger logger = Logger.getLogger(CronitorPinger.class.getName());
 
     @Test
     public void canPingCronitorLink() throws Exception {

@@ -4,13 +4,9 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
 import org.powermock.modules.junit4.PowerMockRunner;
 
-// import java.net.URL;
-
 import static org.mockito.Mockito.verify;
-import io.cronitor.client.Command;
 
 @RunWith(PowerMockRunner.class)
 public class MonitorWithIdentificationTest {
