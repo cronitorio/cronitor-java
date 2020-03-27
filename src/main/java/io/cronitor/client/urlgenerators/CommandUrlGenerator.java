@@ -39,7 +39,7 @@ public class CommandUrlGenerator {
             uriBuilder.addParameter("auth_key", authKey);
         }
         if (message != null) {
-            uriBuilder.addParameter("msg", authKey);
+            uriBuilder.addParameter("msg", message);
         }
 
         return uriBuilder.build().toURL();
