@@ -3,7 +3,6 @@ package io.cronitor.client;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.SocketTimeoutException;
-import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.logging.Logger;
 
@@ -21,31 +20,31 @@ public class CronitorPinger {
     HttpURLConnection connection;
     URL url;
     private final static Logger logger = Logger.getLogger(CronitorPinger.class.getName());
-    private final Integer cronitorPingTimeoutInSecond = 5;
+    private final Integer cronitorPingTimeoutInSecond = 10;
 
-    public void ping(String command, String monitorCode, String apiKey, String message) throws IOException, URISyntaxException {
-        for (int i=0; i<4; i++) {
-            Boolean usePrimaryPingDomain = i < 2;
-            setConnection(getURL(usePrimaryPingDomain, command, monitorCode, apiKey, message));
+    public void ping(String command, String monitorCode, String apiKey, String message, Boolean useHttps) throws IOException {
+        for (int i=0; i<8; i++) {
+            Boolean usePrimaryPingDomain = i < 4;
+            setConnection(getURL(usePrimaryPingDomain, useHttps, command, monitorCode, apiKey, message));
             if (_ping()) { return; }
         }
     }
 
-    public void pause(String monitorCode, int timeoutHours, String apiKey) throws IOException, URISyntaxException {
-        for (int i=0; i<4; i++) {
-            Boolean usePrimaryPingDomain = i < 2;
-            setConnection(getURL(usePrimaryPingDomain, monitorCode, timeoutHours, apiKey));
+    public void pause(String monitorCode, int timeoutHours, String apiKey, Boolean useHttps) throws IOException {
+        for (int i=0; i<8; i++) {
+            Boolean usePrimaryPingDomain = i < 4;
+            setConnection(getURL(usePrimaryPingDomain, useHttps, monitorCode, timeoutHours, apiKey));
             if (_ping()) { return; }
         }
     }
 
     // methods below are left open to package for ease of testing purposes.
-	URL getURL(Boolean usePrimaryPingDomain, String command, String monitorCode, String apiKey, String message) throws IOException, URISyntaxException {
-		return new CommandUrlGenerator(usePrimaryPingDomain).buildURL(command, monitorCode, apiKey, message);
+	URL getURL(Boolean usePrimaryPingDomain, Boolean useHttps, String command, String monitorCode, String apiKey, String message) throws IOException {
+		return new CommandUrlGenerator(usePrimaryPingDomain, useHttps).buildURL(command, monitorCode, apiKey, message);
     }
 
-    URL getURL(Boolean usePrimaryPingDomain, String monitorCode, int timeoutHours, String apiKey) throws IOException, URISyntaxException {
-		return  new CommandUrlGenerator(usePrimaryPingDomain).buildPauseURI(monitorCode, timeoutHours, apiKey);
+    URL getURL(Boolean usePrimaryPingDomain, Boolean useHttps, String monitorCode, int timeoutHours, String apiKey) throws IOException {
+		return  new CommandUrlGenerator(usePrimaryPingDomain, useHttps).buildPauseURI(monitorCode, timeoutHours, apiKey);
     }
 
 
@@ -58,7 +57,7 @@ public class CronitorPinger {
         }
       }
 
-    boolean _ping() throws URISyntaxException {
+    boolean _ping() {
         try {
             this.connection.connect();
             this.connection.getInputStream();

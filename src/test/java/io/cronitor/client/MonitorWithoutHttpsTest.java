@@ -12,10 +12,10 @@ import static org.mockito.Mockito.verify;
 
 
 @RunWith(PowerMockRunner.class)
-public class MonitorWithoutIdentificationTest {
+public class MonitorWithoutHttpsTest {
 
     @InjectMocks
-    private CronitorClient client = new CronitorClient();
+    private CronitorClient client = CronitorClient.withoutHttps();
     @Mock
     private CronitorPinger cronitorPinger;
 
@@ -25,55 +25,55 @@ public class MonitorWithoutIdentificationTest {
     public void can_start_monitor_with_minimal_requirements() throws Exception {
 
         client.run(monitorCode);
-        verify(cronitorPinger).ping(Command.RUN.getValue(), "d3x0c1", null, null, true);
+        verify(cronitorPinger).ping(Command.RUN.getValue(), "d3x0c1", null, null, false);
     }
 
     @Test
     public void can_start_monitor_with_message() throws Exception {
 
         client.run(monitorCode, "customRunMessage");
-        verify(cronitorPinger).ping(Command.RUN.getValue(), "d3x0c1", null, "customRunMessage", true);
+        verify(cronitorPinger).ping(Command.RUN.getValue(), "d3x0c1", null, "customRunMessage", false);
     }
 
     @Test
     public void can_complete_monitor_with_minimal_requirements() throws Exception {
 
         client.complete(monitorCode);
-        verify(cronitorPinger).ping(Command.COMPLETE.getValue(), "d3x0c1", null, null, true);
+        verify(cronitorPinger).ping(Command.COMPLETE.getValue(), "d3x0c1", null, null, false);
     }
 
     @Test
     public void can_complete_monitor_with_message() throws Exception {
 
         client.complete(monitorCode, "customCompleteMessage");
-        verify(cronitorPinger).ping(Command.COMPLETE.getValue(), "d3x0c1", null, "customCompleteMessage", true);
+        verify(cronitorPinger).ping(Command.COMPLETE.getValue(), "d3x0c1", null, "customCompleteMessage", false);
     }
 
     @Test
     public void can_fail_monitor_with_minimal_requirements() throws Exception {
 
         client.fail(monitorCode);
-        verify(cronitorPinger).ping(Command.FAIL.getValue(), "d3x0c1", null, null, true);
+        verify(cronitorPinger).ping(Command.FAIL.getValue(), "d3x0c1", null, null, false);
     }
 
     @Test
     public void can_fail_monitor_with_message() throws Exception {
 
         client.fail(monitorCode, "customFailMessage");
-        verify(cronitorPinger).ping(Command.FAIL.getValue(), "d3x0c1", null, "customFailMessage", true);
+        verify(cronitorPinger).ping(Command.FAIL.getValue(), "d3x0c1", null, "customFailMessage", false);
     }
 
     @Test
     public void can_pause_monitor() throws Exception {
 
         client.pause(monitorCode, 5);
-        verify(cronitorPinger).pause(monitorCode, 5, null, true);
+        verify(cronitorPinger).pause(monitorCode, 5, null, false);
     }
 
     @Test
     public void can_unpause_monitor() throws Exception {
 
         client.unpause(monitorCode);
-        verify(cronitorPinger).pause(monitorCode, 0, null, true);
+        verify(cronitorPinger).pause(monitorCode, 0, null, false);
     }
 }
