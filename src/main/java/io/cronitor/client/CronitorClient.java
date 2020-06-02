@@ -3,7 +3,7 @@ package io.cronitor.client;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.IOException;
-import java.ne;
+
 import java.util.logging.Logger;
 
 public class CronitorClient {
