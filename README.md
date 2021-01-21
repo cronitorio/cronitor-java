@@ -2,11 +2,11 @@
 
 Cronitor is a service for heartbeat-style monitoring of anything that can send an HTTP request. It's particularly well suited for monitoring cron jobs, Jenkins jobs, or any other scheduled task.
 
-This java library provides a simple abstraction for the pinging of a Cronitor monitor. For a better understanding of the API this library talks to, please see our [Ping API docs](https://cronitor.io/docs/ping-api). For a general introduction to Cronitor please read [How Cronitor Works](https://cronitor.io/docs/how-cronitor-works).
+This java library provides a simple abstraction for the pinging of a Cronitor monitor. For a better understanding of the API this library talks to, please see our [Telemetry API docs](https://cronitor.io/docs/telemetry-api).
 
 ## Install
 You can download the cronitor client JAR from the Maven central repository.
-[https://repo.maven.apache.org/maven2/io/cronitor/client/1.3.1/](https://repo.maven.apache.org/maven2/io/cronitor/client/1.3.1/)
+[https://repo.maven.apache.org/maven2/io/cronitor/client/1.4.0/](https://repo.maven.apache.org/maven2/io/cronitor/client/1.4.0/)
 
 ### Install with Maven
 If you are using Maven, simply add this line in your pom.xml file :
@@ -14,7 +14,7 @@ If you are using Maven, simply add this line in your pom.xml file :
 <dependency>
     <groupId>io.cronitor</groupId>
     <artifactId>client</artifactId>
-    <version>1.3.1</version>
+    <version>1.4.0</version>
 </dependency>
 ```
 
@@ -22,13 +22,9 @@ If you are using Maven, simply add this line in your pom.xml file :
 
 Declare a new bean in your Spring configuration :
 ```
-// if you are using the Auth Key of your Cronitor account
 <bean id="cronitorClient" class="io.cronitor.client.CronitorClient">
-     <constructor-arg index="0" value="authKey"/>
+     <constructor-arg index="0" value="apiKey"/>
 </bean>
-
-// otherwise
-<bean id="cronitorClient" class="io.cronitor.client.CronitorClient" />
 ```
 
 Then simply inject this bean into the class containing the routine to monitor :
@@ -40,59 +36,44 @@ private CronitorClient cronitorClient;
 ### Usage without Spring
 Simply declare a new CronitorClient instance in the class containing the routine to monitor:
 ```
-CronitorClient cronitorClient = new CronitorClient();
+CronitorClient cronitorClient = new CronitorClient('yourApiKey');
 ```
 
 ### Examples
 
-### ping /run on a monitor
+### send a run event (a job/process has started)
+```java
+    cronitorClient.run("nightlyDataExport");
 ```
-    try {
-        // ping the /run URL on your monitor
-        cronitorClient.run(monitorCode);
-    } catch (IOException e) {
-        // handle the raised exception the way you want
-    }
-```
-### ping /complete on a monitor
-```
-    try {
-        // ping the /complete URL on your monitor
-        cronitorClient.complete(monitorCode);
-    } catch (IOException e) {
-        // handle the raised exception the way you want
-    }
-```
-### ping /fail on a monitor
-```
-    try {
-        // ping the /fail URL on your monitor with no extra message
-        cronitorClient.fail(monitorCode);
 
-        // ping the /fail URL on your monitor with an extra message
-        cronitorClient.fail(monitorCode, message);
-    } catch (IOException e) {
-        // handle the raised exception the way you want
-    }
+### send a complete event (a job/process has completed successfully)
+```java
+    cronitorClient.complete("nightlyDataExport");
 ```
+
+### send a failure event (a job/process crashed)
+```java
+    cronitorClient.complete("nightlyDataExport");
+```
+
 ### pause a monitor
+```java
+    cronitorClient.pause("nightlyDataExport", numberOfHours);
 ```
-    try {
-        // pause a monitor for a number of hours
-        cronitorClient.pause(monitorCode, numberOfHours);
-    } catch (IOException e) {
-        // handle the raised exception the way you want
-    }
-```
+
 ### unpause a monitor
+```java
+    cronitorClient.unpause("nightlyDataExport");
 ```
-    try {
-        // unpause a monitor
-        cronitorClient.unpause(monitorCode);
-    } catch (IOException e) {
-        // handle the raised exception the way you want
-    }
+
+### including messages
+```java
+    // each event method supports an optional message param
+    cronitorClient.run("nightlyDataExport", "Started by user 123");
+
+    cronitorClient.fail("nightlyDataExport", e.printStackTrace());
 ```
+
 
 ## Development
 

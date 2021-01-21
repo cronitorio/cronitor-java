@@ -8,7 +8,7 @@ import java.util.logging.Logger;
 
 public class CronitorClient {
 
-    private final static Logger logger = Logger.getLogger(CronitorClient.class.getName());
+    private Logger logger = Logger.getLogger(CronitorClient.class.getName());
 
     private CronitorPinger cronitorPinger = new CronitorPinger();
 
@@ -36,73 +36,98 @@ public class CronitorClient {
         return new CronitorClient(false);
     }
 
-    public void run(String monitorCode) throws IOException {
-        if(StringUtils.isNotBlank(monitorCode)) {
-            cronitorPinger.ping(Command.RUN.getValue(), monitorCode, apiKey, null, useHttps);
+    public void run(String monitorKey) throws IOException {
+        if(StringUtils.isNotBlank(monitorKey)) {
+            cronitorPinger.ping(Command.RUN.getValue(), monitorKey, apiKey, null, useHttps);
         } else {
             logger.warning("We can't ping /run on cronitor because the monitor code is null or empty");
         }
     }
 
-    public void run(String monitorCode, String message) throws IOException {
-        if(StringUtils.isNotBlank(monitorCode)) {
-            cronitorPinger.ping(Command.RUN.getValue(), monitorCode, apiKey, message, useHttps);
+    public void run(String monitorKey, String message) throws IOException {
+        if(StringUtils.isNotBlank(monitorKey)) {
+            cronitorPinger.ping(Command.RUN.getValue(), monitorKey, apiKey, message, useHttps);
         } else {
             logger.warning("We can't ping /run on cronitor because the monitor code is null or empty");
         }
     }
 
-    public void complete(String monitorCode) throws IOException {
+    public void complete(String monitorKey) throws IOException {
 
-        if(StringUtils.isNotBlank(monitorCode)) {
-            cronitorPinger.ping(Command.COMPLETE.getValue(), monitorCode, apiKey, null, useHttps);
+        if(StringUtils.isNotBlank(monitorKey)) {
+            cronitorPinger.ping(Command.COMPLETE.getValue(), monitorKey, apiKey, null, useHttps);
         } else {
             logger.warning("We can't ping /complete on cronitor because the monitor code is null or empty");
         }
     }
 
-    public void complete(String monitorCode, String message) throws IOException {
+    public void complete(String monitorKey, String message) throws IOException {
 
-        if(StringUtils.isNotBlank(monitorCode)) {
-            cronitorPinger.ping(Command.COMPLETE.getValue(), monitorCode, apiKey, message, useHttps);
+        if(StringUtils.isNotBlank(monitorKey)) {
+            cronitorPinger.ping(Command.COMPLETE.getValue(), monitorKey, apiKey, message, useHttps);
         } else {
             logger.warning("We can't ping /complete on cronitor because the monitor code is null or empty");
         }
     }
 
-    public void fail(String monitorCode) throws IOException {
+    public void fail(String monitorKey) throws IOException {
 
-        if(StringUtils.isNotBlank(monitorCode)) {
-            cronitorPinger.ping(Command.FAIL.getValue(), monitorCode, apiKey, null, useHttps);
+        if(StringUtils.isNotBlank(monitorKey)) {
+            cronitorPinger.ping(Command.FAIL.getValue(), monitorKey, apiKey, null, useHttps);
         } else {
             logger.warning("We can't ping /fail on cronitor because the monitor code is null or empty");
         }
     }
 
-    public void fail(String monitorCode, String message) throws IOException {
+    public void fail(String monitorKey, String message) throws IOException {
 
-        if(StringUtils.isNotBlank(monitorCode)) {
-            cronitorPinger.ping(Command.FAIL.getValue(), monitorCode, apiKey, message, useHttps);
+        if(StringUtils.isNotBlank(monitorKey)) {
+            cronitorPinger.ping(Command.FAIL.getValue(), monitorKey, apiKey, message, useHttps);
         } else {
             logger.warning("We can't ping /fail on cronitor because the monitor code is null or empty");
         }
     }
 
-    public void pause(String monitorCode, int timeoutInHours) throws IOException {
+    public void tick(String monitorKey) throws IOException {
 
-        if(StringUtils.isNotBlank(monitorCode)) {
-            cronitorPinger.pause(monitorCode, timeoutInHours, apiKey, useHttps);
+        if(StringUtils.isNotBlank(monitorKey)) {
+            cronitorPinger.ping(Command.FAIL.getValue(), monitorKey, apiKey, null, useHttps);
         } else {
-            logger.warning("we can't pause monitor because the monitor code is null or empty");
+            logger.warning("We can't ping /fail on cronitor because the monitor code is null or empty");
         }
     }
 
-    public void unpause(String monitorCode) throws IOException {
+    public void tick(String monitorKey, String message) throws IOException {
 
-        if(StringUtils.isNotBlank(monitorCode)) {
-            cronitorPinger.pause(monitorCode, 0, apiKey, useHttps);
+        if(StringUtils.isNotBlank(monitorKey)) {
+            cronitorPinger.ping(Command.FAIL.getValue(), monitorKey, apiKey, message, useHttps);
         } else {
-            logger.warning("we can't pause monitor because the monitor code is null or empty");
+            logger.warning("We can't ping /fail on cronitor because the monitor code is null or empty");
+        }
+    }
+
+    public void pause(String monitorKey, int hours) throws IOException {
+        if(StringUtils.isNotBlank(apiKey)) {
+            if(StringUtils.isNotBlank(monitorKey)) {
+                cronitorPinger.pause(monitorKey, hours, apiKey);
+            } else {
+                logger.warning("Monitor key cannot be blank.");
+            }
+        } else {
+            logger.warning("Set an API key to call pause.");
+        }
+    }
+
+    public void unpause(String monitorKey) throws IOException {
+
+        if(StringUtils.isNotBlank(apiKey)) {
+            if(StringUtils.isNotBlank(monitorKey)) {
+                cronitorPinger.pause(monitorKey, 0, apiKey);
+            } else {
+                logger.warning("Monitor key cannot be blank.");
+            }
+        } else {
+            logger.warning("Set an API key to call unpause.");
         }
     }
 }

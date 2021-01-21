@@ -5,7 +5,8 @@ public enum Command {
     RUN("run"),
     PAUSE("pause"),
     COMPLETE("complete"),
-    FAIL("fail");
+    FAIL("fail"),
+    TICK("tick");
 
     private String value;
 

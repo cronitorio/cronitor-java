@@ -15,67 +15,54 @@ public class CommandUrlGeneratorTest {
     private CommandUrlGenerator fallbackUrlGenerator = new CommandUrlGenerator(false, true);
     private CommandUrlGenerator httpUrlGenerator = new CommandUrlGenerator(true, false);
 
-    private String monitorCode = "d3x0c1";
+    private String monitorKey = "d3x0c1";
+    private String apiKey = "anApiKey";
 
     @Test
     public void can_build_run_url() throws Exception {
-        URL runURL = urlGenerator.buildURL(Command.RUN.getValue(), monitorCode, null, null);
+        URL runURL = urlGenerator.buildURL(Command.RUN.getValue(), monitorKey, apiKey, null);
 
-        Assert.assertEquals(new URL("https://cronitor.link/d3x0c1/run"), runURL);
+        Assert.assertEquals(new URL(String.format("https://cronitor.link/p/%s/%s?state=run", apiKey, monitorKey)), runURL);
     }
 
     @Test
     public void can_build_complete_url() throws Exception {
-        URL runURL = urlGenerator.buildURL(Command.COMPLETE.getValue(), monitorCode, null, null);
+        URL completeUrl = urlGenerator.buildURL(Command.COMPLETE.getValue(), monitorKey, apiKey, null);
 
-        Assert.assertEquals(new URL("https://cronitor.link/d3x0c1/complete"), runURL);
+        Assert.assertEquals(new URL(String.format("https://cronitor.link/p/%s/%s?state=complete", apiKey, monitorKey)), completeUrl);
     }
 
     @Test
     public void can_build_fail_url() throws Exception {
-        URL runURL = urlGenerator.buildURL(Command.FAIL.getValue(), monitorCode, null, null);
+        URL fail = urlGenerator.buildURL(Command.FAIL.getValue(), monitorKey, apiKey, null);
 
-        Assert.assertEquals(new URL("https://cronitor.link/d3x0c1/fail"), runURL);
+        Assert.assertEquals(new URL(String.format("https://cronitor.link/p/%s/%s?state=fail", apiKey, monitorKey)), fail);
     }
 
     @Test
     public void can_build_pause_url() throws Exception {
-        URL runURL = urlGenerator.buildPauseURI(monitorCode, 5, null);
+        URL pauseUrl = urlGenerator.buildPauseURI(monitorKey, 5, null);
 
-        Assert.assertEquals(new URL("https://cronitor.link/d3x0c1/pause/5"), runURL);
-    }
-
-    @Test
-    public void can_build_url_with_auth_key() throws Exception {
-        URL runURL = urlGenerator.buildURL(Command.RUN.getValue(), monitorCode, "customAuthKey", null);
-
-        Assert.assertEquals(new URL("https://cronitor.link/d3x0c1/run?auth_key=customAuthKey"), runURL);
+        Assert.assertEquals(new URL("https://cronitor.io/api/monitors/d3x0c1/pause/5"), pauseUrl);
     }
 
     @Test
     public void can_build_url_with_msg() throws Exception {
-        URL runURL = urlGenerator.buildURL(Command.RUN.getValue(), monitorCode, null, "customMessage");
+        URL runURL = urlGenerator.buildURL(Command.RUN.getValue(), monitorKey, apiKey, "customMessage");
 
-        Assert.assertEquals(new URL("https://cronitor.link/d3x0c1/run?msg=customMessage"), runURL);
-    }
-
-    @Test
-    public void can_build_url_with_msg_and_auth_key() throws Exception {
-        URL runURL = urlGenerator.buildURL(Command.RUN.getValue(), monitorCode, "customAuthKey", "customMessage");
-
-        Assert.assertEquals(new URL("https://cronitor.link/d3x0c1/run?auth_key=customAuthKey&msg=customMessage"), runURL);
+        Assert.assertEquals(new URL(String.format("https://cronitor.link/p/%s/%s?state=run&msg=customMessage", apiKey, monitorKey)), runURL);
     }
 
     @Test
     public void can_build_url_with_fallback_domain() throws Exception {
-        URL runURL = fallbackUrlGenerator.buildURL(Command.RUN.getValue(), monitorCode, null, null);
-        Assert.assertEquals(new URL("https://cronitor.io/d3x0c1/run"), runURL);
+        URL runURL = fallbackUrlGenerator.buildURL(Command.RUN.getValue(), monitorKey, apiKey, null);
+        Assert.assertEquals(new URL(String.format("https://cronitor.io/p/%s/%s?state=run", apiKey, monitorKey)), runURL);
     }
 
     @Test
     public void can_build_url_without_https() throws Exception {
-        URL runURL = httpUrlGenerator.buildURL(Command.RUN.getValue(), monitorCode, null, null);
-        Assert.assertEquals(new URL("http://cronitor.link/d3x0c1/run"), runURL);
+        URL runURL = httpUrlGenerator.buildURL(Command.RUN.getValue(), monitorKey, apiKey, null);
+        Assert.assertEquals(new URL("http://cronitor.link/d3x0c1?state=run"), runURL);
     }
 
 

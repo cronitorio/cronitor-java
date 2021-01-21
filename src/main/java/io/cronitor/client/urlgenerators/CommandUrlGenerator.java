@@ -9,12 +9,11 @@ import java.util.logging.Logger;
 
 public class CommandUrlGenerator {
 
-    private static final String BASE_URL = "https://cronitor.link/%s/%s";
-    private static final String BASE_URL_HTTP = "http://cronitor.link/%s/%s";
-    private static final String FALLBACK_BASE_URL = "https://cronitor.io/%s/%s";
+    private static final String BASE_URL = "https://cronitor.link/p/%s/%s";
+    private static final String BASE_URL_HTTP = "http://cronitor.link/%s";
+    private static final String FALLBACK_BASE_URL = "https://cronitor.io/p/%s/%s";
 
-    private static final String PAUSE_BASE_URL = "https://cronitor.link/%s/pause/%s";
-    private static final String PAUSE_BASE_URL_HTTP = "http://cronitor.link/%s/pause/%s";
+    private static final String PAUSE_BASE_URL = "https://cronitor.io/api/monitors/%s/pause/%s";
     private static final String FALLBACK_PAUSE_BASE_URL = "https://cronitor.io/%s/pause/%s";
 
     private Boolean usePrimaryPingDomain;
@@ -35,50 +34,51 @@ public class CommandUrlGenerator {
     }
 
 
-    public URL buildURL(String command, String monitorCode, String authKey, String message) throws MalformedURLException {
+    public URL buildURL(String command, String monitorKey, String apiKey, String message) throws MalformedURLException {
         String baseURL;
+        String url;
+
         if (usePrimaryPingDomain) {
-            baseURL =  useHttps ? CommandUrlGenerator.BASE_URL : CommandUrlGenerator.BASE_URL_HTTP;
+            if (useHttps) {
+                url = String.format(CommandUrlGenerator.BASE_URL, apiKey, monitorKey);
+            } else {
+                url = String.format(CommandUrlGenerator.BASE_URL_HTTP, monitorKey);
+            }
         } else {
-            baseURL = CommandUrlGenerator.FALLBACK_BASE_URL;
+            url = String.format(CommandUrlGenerator.FALLBACK_BASE_URL, apiKey, monitorKey);
         }
 
         try {
-            URIBuilder uriBuilder = new URIBuilder(String.format(baseURL, monitorCode, command));
+            URIBuilder uriBuilder = new URIBuilder(url);
 
-            if (authKey != null) {
-                uriBuilder.addParameter("auth_key", authKey);
-            }
+            uriBuilder.addParameter("state", command);
+
             if (message != null) {
                 uriBuilder.addParameter("msg", message);
             }
 
             return uriBuilder.build().toURL();
         } catch (URISyntaxException e) {
-            logger.warning(String.format("Failed to construct url for [%s, %s, %s, %s]", command, monitorCode, authKey, message));
+            logger.warning(String.format("Failed to construct url for [%s, %s, %s, %s]", command, monitorKey, apiKey, message));
             return new URL(CommandUrlGenerator.BASE_URL);
         }
 
     }
 
-    public URL buildPauseURI(String monitorCode, int pauseHours, String authKey) throws MalformedURLException {
+    public URL buildPauseURI(String monitorKey, int pauseHours, String apiKey) throws MalformedURLException {
         String baseURL;
         if (usePrimaryPingDomain) {
-            baseURL = useHttps ? CommandUrlGenerator.PAUSE_BASE_URL : CommandUrlGenerator.PAUSE_BASE_URL_HTTP;
+            baseURL = CommandUrlGenerator.PAUSE_BASE_URL;
         } else {
             baseURL = CommandUrlGenerator.FALLBACK_PAUSE_BASE_URL;
         }
 
         try {
-            URIBuilder uriBuilder = new URIBuilder(String.format(baseURL, monitorCode, pauseHours));
-
-            if (authKey != null) {
-                uriBuilder.addParameter("auth_key", authKey);
-            }
+            URIBuilder uriBuilder = new URIBuilder(String.format(baseURL, monitorKey, pauseHours));
 
             return uriBuilder.build().toURL();
         } catch (URISyntaxException e) {
-            logger.warning(String.format("Failed to construct url for [%s, %d, %s, %s]", monitorCode, pauseHours, authKey));
+            logger.warning(String.format("Failed to construct url for [%s, %d, %s, %s]", monitorKey, pauseHours, apiKey));
             return new URL(CommandUrlGenerator.PAUSE_BASE_URL);
         }
     }
